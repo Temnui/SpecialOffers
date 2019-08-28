@@ -14,10 +14,6 @@ let process_wb = (function() {
 	};
 })();
 
-function vars() {
-    let e.target.result = 1;
-}
-
 let do_file = (function() {
 	return function do_file(files) {
 		let f = files[0];
