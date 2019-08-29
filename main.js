@@ -4,11 +4,13 @@ let electron = require('electron');
 let XLSX = require('xlsx');
 let app = electron.app;
 
+require('electron-reload')(__dirname);
+
 let win = null;
 
 function createWindow() {
 	if(win) return;
-	win = new electron.BrowserWindow({width:800, height:600});
+	win = new electron.BrowserWindow({width:1200, height:800});
 	win.loadURL("file://" + __dirname + "/index.html");
 	win.webContents.openDevTools();
 	win.on('closed', function() { win = null; });
