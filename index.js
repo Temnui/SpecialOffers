@@ -1,8 +1,37 @@
 let XLSX = require('xlsx');
 let electron = require('electron').remote;
 
+// declare variables
 let global = [];
+let sheet = null;
+let tOffers = [];
+let specialOffers = {};
 
+// todo fill all requirements
+let requirements = {};
+requirements.anyOtherProduct = 'БУДЬ-ЯКОГО ІНШОГО ПРОДУКТУ';
+requirements.anyMultiOtherProduct = 'БУДЬ-ЯКИХ ІНШИХ ПРОДУКТІВ';
+requirements.anyMultiOtherProductSumm = 'будь-яких продуктів на суму';
+
+/**
+ * Function that get string, parse it, and if it contains 5 or 7 digit fsc return this fsc
+ * @param str
+ * @return fsc
+ */
+function checkOnlyFsc(str) {
+    let returningValue = null;
+    let arr = str.split(' ');
+    arr.forEach(elem => {
+        if (/^\d+$/.test(elem)) {
+            if (elem.length === 5 || elem.length === 7) { console.log(elem);
+                returningValue = elem;
+            }
+        }
+    });
+    return returningValue;
+}
+
+// basic xls imports
 let process_wb = (function () {
     let HTMLOUT = document.getElementById('htmlout');
     let XPORT = document.getElementById('xport');
@@ -19,6 +48,7 @@ let process_wb = (function () {
     };
 })();
 
+// work with file on xls imports
 let do_file = (function () {
     return function do_file(files) {
         let f = files[0];
@@ -33,6 +63,7 @@ let do_file = (function () {
     };
 })();
 
+// drag'n'drop functionality
 (function () {
     let drop = document.getElementById('drop');
 
@@ -53,6 +84,7 @@ let do_file = (function () {
     drop.addEventListener('drop', handleDrop, false);
 })();
 
+// fileReader functionality
 (function () {
     let readf = document.getElementById('readf');
 
@@ -72,6 +104,7 @@ let do_file = (function () {
     readf.addEventListener('click', handleF, false);
 })();
 
+// trigger do_file
 (function () {
     let xlf = document.getElementById('xlf');
 
@@ -82,6 +115,7 @@ let do_file = (function () {
     xlf.addEventListener('change', handleFile, false);
 })();
 
+// basic imports (do not touch anything)
 let export_xlsx = (function () {
     let HTMLOUT = document.getElementById('htmlout');
     let XTENSION = "xls|xlsx|xlsm|xlsb|xml|csv|txt|dif|sylk|slk|prn|ods|fods|htm|html".split("|");
@@ -101,10 +135,7 @@ let export_xlsx = (function () {
 })();
 void export_xlsx;
 
-let sheet = null;
-let tOffers = [];
-let specialOffers = {};
-
+// noinspection JSUnusedLocalSymbols
 function beginWork() {
     // todo make book sheet navigation.
     // temporarily we chose second sheet by default
@@ -116,6 +147,10 @@ function beginWork() {
     makeSpecialOfferByType('BROCH');
 }
 
+/**
+ * get param type, search in sheet all offers from this type of brochure, and call fillSpecialOffers() for that offers
+ * @param type
+ */
 function makeSpecialOfferByType(type) {
     if (type === 'BROCH') {
         for (let i = 0; i < sheet.length; i++) {
@@ -124,10 +159,8 @@ function makeSpecialOfferByType(type) {
             }
             if (i === sheet.length - 1) {
                 fillSpecialOffers('nb');
-                console.log('start fillSpecialOffers()');
             }
         }
-        console.log(tOffers);
     }
 }
 
