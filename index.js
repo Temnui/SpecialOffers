@@ -113,15 +113,53 @@ function beginWork() {
     console.log(sheet);
     // todo add brochure selection
     // use BROCH by default
-    for (let i = 0; i < sheet.length; i++) {
-        if (sheet[i]["Offer source"] === 'BROCH') {
-            tOffers.push(sheet[i]);
+    makeSpecialOfferByType('BROCH');
+}
+
+function makeSpecialOfferByType(type) {
+    if (type === 'BROCH') {
+        for (let i = 0; i < sheet.length; i++) {
+            if (sheet[i]["Offer source"] === type) {
+                tOffers.push(sheet[i]);
+            }
+            if (i === sheet.length - 1) {
+                fillSpecialOffers('nb');
+                console.log('start fillSpecialOffers()');
+            }
+        }
+        console.log(tOffers);
+    }
+}
+
+function fillSpecialOffers(brochureType) {
+    if (brochureType === 'nb') {
+        specialOffers.nb = {};
+        for (let i = 0; i < tOffers.length; i++) {
+            let id = tOffers[i]['Offer number'];
+            specialOffers.nb[id] = {};
+            specialOffers.nb[id].text = tOffers[i]['Qualifier'];
+            specialOffers.nb[id].page = tOffers[i]['Page'];
+            specialOffers.nb[id].fsc = getPriceFsc(tOffers[i]['Get']);
         }
     }
-    console.log(tOffers);
-    for (let i = 0; i < tOffers.length; i++) {
+}
 
+function parsePriceFsc(element) {
+    if (/Набір/ig.test(element)) {
+        element = element.split(':');
+        return element[element.length - 1].trim();
+    } else if (/\//g.test(element)) {
+        element = element.split(/[-/]/);
+        return element.map(str => str.trim());
+    } else {
+        return element.split('-').map(str => str.trim());
     }
+}
+
+function getPriceFsc(array) {
+    let byLines = array.split("\n");
+    byLines = byLines.map(str => str.replace(' ', ''));
+    return byLines.map(parsePriceFsc);
 }
 
 // section for test:
