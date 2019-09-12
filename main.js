@@ -4,7 +4,7 @@ let electron = require('electron');
 let XLSX = require('xlsx');
 let app = electron.app;
 
-require('electron-reload')(__dirname);
+//require('electron-reload')(__dirname);
 
 let win = null;
 

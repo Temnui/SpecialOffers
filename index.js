@@ -6,6 +6,7 @@ let global = [];
 let process_wb = (function () {
     let HTMLOUT = document.getElementById('htmlout');
     let XPORT = document.getElementById('xport');
+    document.getElementById('beginWork').disabled = false;
     return function process_wb(wb) {
         XPORT.disabled = false;
         HTMLOUT.innerHTML = "";
@@ -99,6 +100,29 @@ let export_xlsx = (function () {
     };
 })();
 void export_xlsx;
+
+let sheet = null;
+let tOffers = [];
+let specialOffers = {};
+
+function beginWork() {
+    // todo make book sheet navigation.
+    // temporarily we chose second sheet by default
+    let sheetNum = 1;
+    sheet = global[sheetNum];
+    console.log(sheet);
+    // todo add brochure selection
+    // use BROCH by default
+    for (let i = 0; i < sheet.length; i++) {
+        if (sheet[i]["Offer source"] === 'BROCH') {
+            tOffers.push(sheet[i]);
+        }
+    }
+    console.log(tOffers);
+    for (let i = 0; i < tOffers.length; i++) {
+
+    }
+}
 
 // section for test:
 
